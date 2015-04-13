@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 
 namespace BuildingBlocks.Tests
 {
+    using System;
     using BuildingBlocks.Tests.Helpers;
     using global::BuildingBlocks.Domain;
     using NUnit.Framework;
@@ -523,7 +524,7 @@ namespace BuildingBlocks.Tests
             StringAssert.Contains(expected, actual);
         }
 
-        public class MockEntityObjectBase<T> : EntityWithTypedId<T>
+        public class MockEntityObjectBase<T> : Entity<T> where T : IEquatable<T>
         {
             public string Email { get; set; }
 
@@ -597,7 +598,7 @@ namespace BuildingBlocks.Tests
             public string Name { get; set; }
         }
 
-        private class ObjectWithAssignedId : EntityWithTypedId<string>, IHasAssignedId<string>
+        private class ObjectWithAssignedId : Entity<string>, IHasAssignedId<string>
         {
             [DomainSignature]
             public string Name { get; set; }

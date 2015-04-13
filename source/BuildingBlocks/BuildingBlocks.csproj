@@ -44,12 +44,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\IRepository.cs" />
     <Compile Include="Domain\BaseObject.cs" />
     <Compile Include="Domain\BaseObjectEqualityComparer.cs" />
     <Compile Include="Domain\DomainSignatureAttribute.cs" />
     <Compile Include="Domain\Entity.cs" />
-    <Compile Include="Domain\EntityWithTypedId.cs" />
-    <Compile Include="Domain\IEntityWithTypedId.cs" />
+    <Compile Include="Domain\IEntity.cs" />
     <Compile Include="Domain\IHasAssignedId.cs" />
     <Compile Include="Domain\ValidatableObject.cs" />
     <Compile Include="Domain\ValueObject.cs" />
@@ -58,6 +58,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\packages\GitVersionTask.2.0.1\Build\GitVersionTask.targets" Condition="Exists('..\..\packages\GitVersionTask.2.0.1\Build\GitVersionTask.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

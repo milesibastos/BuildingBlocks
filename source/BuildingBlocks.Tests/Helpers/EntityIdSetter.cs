@@ -14,9 +14,9 @@
     public static class EntityIdSetter
     {
         /// <summary>
-        ///     Uses reflection to set the Id of a <see cref = "EntityWithTypedId{IdT}" />.
+        ///     Uses reflection to set the Id of a <see cref = "Entity{IdT}" />.
         /// </summary>
-        public static void SetIdOf<TId>(IEntityWithTypedId<TId> entity, TId id)
+        public static void SetIdOf<TId>(IEntity<TId> entity, TId id)
         {
             // Set the data property reflectively
             var idProperty = entity.GetType().GetProperty("Id", BindingFlags.Public | BindingFlags.Instance);
@@ -27,9 +27,9 @@
         }
 
         /// <summary>
-        ///     Uses reflection to set the Id of a <see cref = "EntityWithTypedId{IdT}" />.
+        ///     Uses reflection to set the Id of a <see cref = "Entity{IdT}" />.
         /// </summary>
-        public static IEntityWithTypedId<TId> SetIdTo<TId>(this IEntityWithTypedId<TId> entity, TId id)
+        public static IEntity<TId> SetIdTo<TId>(this IEntity<TId> entity, TId id)
         {
             SetIdOf(entity, id);
             return entity;
