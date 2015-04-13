@@ -25,7 +25,7 @@ namespace BuildingBlocks.Domain
     ///     http://devlicio.us/blogs/billy_mccafferty/archive/2007/04/25/using-equals-gethashcode-effectively.aspx
     /// </summary>
     [Serializable]
-    public abstract class Entity<TKey> : ValidatableObject, IEntity<TKey> where TKey : IEquatable<TKey>
+    public abstract class Entity<TKey> : ValidatableObject, IEntity<TKey>
     {
         /// <summary>
         ///     To help ensure hashcode uniqueness, a carefully selected random number multiplier 
