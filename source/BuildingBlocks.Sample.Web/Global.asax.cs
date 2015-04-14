@@ -9,6 +9,7 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using NHibernate;
 using NHibernate.Cfg;
+using NHibernate.DomainModel.Northwind.Entities;
 
 namespace BuildingBlocks.Sample.Web
 {
@@ -25,8 +26,8 @@ namespace BuildingBlocks.Sample.Web
             {
                 Configuration.Configure(nhConfigPath);
             }
-            Configuration.SetDefaultAssembly(typeof(Item).Assembly.FullName)
-                .SetDefaultNamespace(typeof(Item).Namespace)
+            Configuration.SetDefaultAssembly(typeof(Animal).Assembly.FullName)
+                .SetDefaultNamespace(typeof(Animal).Namespace)
                 .AddDirectory(new DirectoryInfo(HostingEnvironment.MapPath("~/App_Data/")));
 
             var _factory = Configuration.BuildSessionFactory();
