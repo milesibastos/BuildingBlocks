@@ -1,78 +1,96 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Linq.Expressions;
 using BuildingBlocks.Domain;
+using NHibernate;
+using NHibernate.Linq;
 
 namespace BuildingBlocks.Data.NHibernate
 {
-    public class NHRepository<TEntity> : IRepository<TEntity> 
-        where TEntity : Entity<object>
+    public class NHRepository<TEntity> : IRepository<TEntity>
+        where TEntity : IEntity<object>
     {
+        private readonly ISession _session;
+
+        public NHRepository(ISession session)
+        {
+            _session = session;
+        }
+
         public TEntity this[object id]
         {
-            get { throw new NotImplementedException(); }
+            get { return _session.Get<TEntity>(id); }
         }
 
         public void Add(TEntity item)
         {
-            throw new NotImplementedException();
+            Contract.Requires<ArgumentNullException>(item != null);
+            _session.Save(item);
+            _session.Flush();
         }
 
         public void Clear()
         {
-            throw new NotImplementedException();
+            throw new InvalidOperationException();
         }
 
         public bool Contains(TEntity item)
         {
-            throw new NotImplementedException();
+            Contract.Requires<ArgumentNullException>(item != null);
+            return _session.Contains(item);
         }
 
         public void CopyTo(TEntity[] array, int arrayIndex)
         {
-            throw new NotImplementedException();
+            Contract.Requires<ArgumentNullException>(array != null);
+            var source = _session.Query<TEntity>().ToArray();
+            Array.Copy(source, 0, array, arrayIndex, source.Count());
         }
 
         public int Count
         {
-            get { throw new NotImplementedException(); }
+            get { return _session.Query<TEntity>().Count(); }
         }
 
         public bool IsReadOnly
         {
-            get { throw new NotImplementedException(); }
+            get { return false; }
         }
 
         public bool Remove(TEntity item)
         {
-            throw new NotImplementedException();
+            Contract.Requires<ArgumentNullException>(item != null);
+            _session.Delete(item);
+            _session.Flush();
+            return true;
         }
 
         public IEnumerator<TEntity> GetEnumerator()
         {
-            throw new NotImplementedException();
+            return _session.Query<TEntity>().GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return _session.Query<TEntity>().GetEnumerator();
         }
 
         public Type ElementType
         {
-            get { throw new NotImplementedException(); }
+            get { return _session.Query<TEntity>().ElementType; }
         }
 
         public Expression Expression
         {
-            get { throw new NotImplementedException(); }
+            get { return _session.Query<TEntity>().Expression; }
         }
 
         public IQueryProvider Provider
         {
-            get { throw new NotImplementedException(); }
+            get { return _session.Query<TEntity>().Provider; }
         }
     }
 }

@@ -8,7 +8,7 @@ using BuildingBlocks.Domain;
 namespace BuildingBlocks.Data
 {
     public interface IRepository<TEntity> : IRepository<object, TEntity>
-        where TEntity : Entity<object> { }
+        where TEntity : IEntity<object> { }
 
     /// <summary>
     ///     Defines the public members of a class that implements the repository pattern for entities
@@ -19,7 +19,7 @@ namespace BuildingBlocks.Data
     public interface IRepository<TKey, TEntity> : 
         ICollection<TEntity>,
         IQueryable<TEntity>
-        where TEntity : Entity<TKey>
+        where TEntity : IEntity<TKey>
     {
         /// <summary>
         ///     Get the specified entity
