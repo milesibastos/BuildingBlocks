@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingBlocks.Data.NHibern
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingBlocks.Data.NHibernate.Tests", "BuildingBlocks.Data.NHibernate.Tests\BuildingBlocks.Data.NHibernate.Tests.csproj", "{A441A05F-BEF3-4AE8-9500-481D6C996FB4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample", "Sample", "{3536AECD-1200-404B-AB17-FC400D9FB1B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingBlocks.Sample.Web", "BuildingBlocks.Sample.Web\BuildingBlocks.Sample.Web.csproj", "{302164C7-7A64-4BAC-8E4C-DD25C86666F7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,8 +37,15 @@ Global
 		{A441A05F-BEF3-4AE8-9500-481D6C996FB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A441A05F-BEF3-4AE8-9500-481D6C996FB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A441A05F-BEF3-4AE8-9500-481D6C996FB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{302164C7-7A64-4BAC-8E4C-DD25C86666F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{302164C7-7A64-4BAC-8E4C-DD25C86666F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{302164C7-7A64-4BAC-8E4C-DD25C86666F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{302164C7-7A64-4BAC-8E4C-DD25C86666F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{302164C7-7A64-4BAC-8E4C-DD25C86666F7} = {3536AECD-1200-404B-AB17-FC400D9FB1B1}
 	EndGlobalSection
 EndGlobal
