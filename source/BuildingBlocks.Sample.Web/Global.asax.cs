@@ -21,7 +21,7 @@ namespace BuildingBlocks.Sample.Web
         {
             log4net.Config.XmlConfigurator.Configure();
             var Configuration = new Configuration();
-            string nhConfigPath = HostingEnvironment.MapPath("~/App_Data/hibernate.cfg.xml");
+            string nhConfigPath = HostingEnvironment.MapPath("~/App_Data/nhibernate.cfg.xml");
             if (File.Exists(nhConfigPath))
             {
                 Configuration.Configure(nhConfigPath);
