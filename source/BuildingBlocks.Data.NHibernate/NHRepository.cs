@@ -15,6 +15,9 @@ namespace BuildingBlocks.Data.NHibernate
     {
         private readonly ISession _session;
 
+        public NHRepository() : 
+            this(SessionResolver.Current.GetCurrentSessionFor(typeof(TEntity))) { }
+
         public NHRepository(ISession session)
         {
             _session = session;
