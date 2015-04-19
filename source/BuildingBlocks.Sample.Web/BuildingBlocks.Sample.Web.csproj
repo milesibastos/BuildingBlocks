@@ -51,12 +51,21 @@
       <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Owin">
+      <HintPath>..\..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb">
+      <HintPath>..\..\packages\Microsoft.Owin.Host.SystemWeb.3.0.1\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
       <HintPath>..\..\packages\NHibernate.4.0.3.4000\lib\net40\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin">
+      <HintPath>..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -121,7 +130,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Code\LinqReadonlyTestsContext.cs" />
+    <Compile Include="App_Code\SessionContext.cs" />
+    <Compile Include="App_Code\NHProvider.cs" />
     <Compile Include="App_Code\NorthwindDbCreator.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -131,6 +141,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\PatientData.cfg.xml">
@@ -198,6 +209,14 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BuildingBlocks.Data.NHibernate\BuildingBlocks.Data.NHibernate.csproj">
+      <Project>{cc217ea2-ce18-4e0b-9dc5-3336c9961a58}</Project>
+      <Name>BuildingBlocks.Data.NHibernate</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BuildingBlocks\BuildingBlocks.csproj">
+      <Project>{e3c8dce2-74b7-44a3-b27b-3b41ed8a1719}</Project>
+      <Name>BuildingBlocks</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NHibernate.DomainModel\NHibernate.DomainModel.csproj">
       <Project>{5c649b55-1b3f-4c38-9998-1b043e94a244}</Project>
       <Name>NHibernate.DomainModel</Name>
