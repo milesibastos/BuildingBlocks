@@ -13,8 +13,8 @@ namespace BuildingBlocks.Sample.Web
         static MvcApplication()
         {
             log4net.Config.XmlConfigurator.Configure();
-            var context = new LinqReadonlyTestsContext();
-            context.CreateNorthwindDb();
+            //var context = new LinqReadonlyTestsContext();
+            //context.CreateNorthwindDb();
         }
 
         protected void Application_Start()

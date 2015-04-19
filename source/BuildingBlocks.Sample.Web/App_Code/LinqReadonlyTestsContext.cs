@@ -1,11 +1,12 @@
-using System.IO;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Web.Hosting;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Connection;
-using NHibernate.Dialect;
+using NHibernate.Engine;
 using NHibernate.Tool.hbm2ddl;
 
 namespace BuildingBlocks.Sample.Web
@@ -15,12 +16,32 @@ namespace BuildingBlocks.Sample.Web
 		/// <summary>
 		/// Assembly to load mapping files from
 		/// </summary>
-		protected virtual string MappingsAssembly
-		{
-			get { return "NHibernate.DomainModel"; }
-		}
+		const string MAPPINGSASSEMBLY = "NHibernate.DomainModel";
 
-        public void CreateNorthwindDb()
+        private static readonly IEnumerable<ISessionFactory> _sessionFactory;
+
+        public static ISessionFactory GetSessionFactory<TEntity>()
+        {
+            return GetSessionFactory(typeof(TEntity));
+        }
+
+        public static ISessionFactory GetSessionFactory(Type type)
+        {
+            var factory = _sessionFactory.SingleOrDefault(x => ((ISessionFactoryImplementor)x).TryGetEntityPersister(type.FullName) != null);
+            return factory;
+        }
+
+        public static ISession GetCurrentSession<TEntity>()
+        {
+            return GetSessionFactory<TEntity>().GetCurrentSession();
+        }
+        
+        public static ISession GetCurrentSession(Type type)
+        {
+            return GetSessionFactory(type).GetCurrentSession();
+        }
+
+        static LinqReadonlyTestsContext()
         {
             string nhConfigPath = HostingEnvironment.MapPath("~/App_Data/NorthwindData.cfg.xml");
             Configuration configuration = Configure(nhConfigPath,
@@ -58,58 +79,20 @@ namespace BuildingBlocks.Sample.Web
             ISessionFactory patientSessionFactory = configuration.BuildSessionFactory();
             PatientCreateTestData(patientSessionFactory);
 
+            _sessionFactory = new List<ISessionFactory>(new[] { northwindSessionFactory, miscSessionFactory, patientSessionFactory });
+
         }
 
-        //private void ExecuteScriptFile(Configuration configuration, string scripFileName)
-        //{
-        //    var file = new FileInfo(scripFileName);
-        //    string script = file.OpenText().ReadToEnd().Replace("GO", "");
-        //    var connectionProvider = ConnectionProviderFactory.NewConnectionProvider(configuration.GetDerivedProperties());
-        //    using (var conn = connectionProvider.GetConnection())
-        //    {
-        //        if (conn.State == ConnectionState.Closed)
-        //        {
-        //            conn.Open();
-        //        }
-        //        using (var command = conn.CreateCommand())
-        //        {
-        //            command.CommandText = script;
-        //            command.ExecuteNonQuery();
-        //        }
-        //    }
-        //}
-
-        //public void DestroyNorthwindDb()
-        //{
-        //    string nhConfigPath = HostingEnvironment.MapPath("~/App_Data/NorthwindData.cfg.xml");
-        //    Configuration configuration = NorthwindConfigure(nhConfigPath);
-        //    string scripFileName = GetScripFileName(configuration, "LinqReadonlyDropScript");
-        //    if (File.Exists(scripFileName))
-        //    {
-        //        ExecuteScriptFile(configuration, scripFileName);
-        //    }
-        //    else
-        //    {
-        //        new SchemaExport(configuration).Drop(false, true);
-        //    }
-        //}
-
-		private string GetScripFileName(Configuration configuration,string postFix)
-		{
-			var dialect = Dialect.GetDialect(configuration.Properties);
-			return Path.Combine("DbScripts", dialect.GetType().Name + postFix + ".sql");
-		}
-
-        private Configuration Configure(string nhConfigPath, params string[] mappings)
+        private static Configuration Configure(string nhConfigPath, params string[] mappings)
 		{
 			var configuration = new Configuration();
             configuration.Configure(nhConfigPath);
 
-			configuration.SetProperty(Environment.ConnectionProvider, typeof (DriverConnectionProvider).AssemblyQualifiedName);
+			configuration.SetProperty(NHibernate.Cfg.Environment.ConnectionProvider, typeof (DriverConnectionProvider).AssemblyQualifiedName);
 
-			Assembly assembly = Assembly.Load(MappingsAssembly);
+			Assembly assembly = Assembly.Load(MAPPINGSASSEMBLY);
 
-            foreach (string file in mappings.Select(mf => MappingsAssembly + "." + mf))
+            foreach (string file in mappings.Select(mf => MAPPINGSASSEMBLY + "." + mf))
 			{
 				configuration.AddResource(file, assembly);
 			}
@@ -117,7 +100,7 @@ namespace BuildingBlocks.Sample.Web
 			return configuration;
 		}
 
-        private void NorthwindCreateTestData(ISessionFactory sessionFactory)
+        private static void NorthwindCreateTestData(ISessionFactory sessionFactory)
         {
             using (IStatelessSession session = sessionFactory.OpenStatelessSession())
             using (ITransaction tx = session.BeginTransaction())
@@ -128,7 +111,7 @@ namespace BuildingBlocks.Sample.Web
             }
         }
 
-        private void MiscTestCreateTestData(ISessionFactory sessionFactory)
+        private static void MiscTestCreateTestData(ISessionFactory sessionFactory)
         {
             using (ISession session = sessionFactory.OpenSession())
             using (ITransaction tx = session.BeginTransaction())
@@ -138,7 +121,7 @@ namespace BuildingBlocks.Sample.Web
             }
         }
 
-        private void PatientCreateTestData(ISessionFactory sessionFactory)
+        private static void PatientCreateTestData(ISessionFactory sessionFactory)
         {
             using (ISession session = sessionFactory.OpenSession())
             using (ITransaction tx = session.BeginTransaction())
