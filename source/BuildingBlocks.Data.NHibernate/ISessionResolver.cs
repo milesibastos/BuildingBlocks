@@ -9,6 +9,7 @@ namespace BuildingBlocks.Data.NHibernate
 {
     public interface ISessionResolver
     {
+        IEnumerable<ISessionFactory> GetAllFactories();
         ISession GetCurrentSessionFor(Type type);
     }
 }

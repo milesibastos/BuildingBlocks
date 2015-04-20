@@ -69,6 +69,11 @@ namespace BuildingBlocks.Data.NHibernate
             {
                 _factories.Add(factory);
             }
+
+            public IEnumerable<ISessionFactory> GetAllFactories()
+            {
+                return _factories;
+            }
         }
     }
 }

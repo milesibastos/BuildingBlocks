@@ -5,6 +5,7 @@ using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Context;
 using NHibernate.Engine;
+using Owin;
 
 namespace BuildingBlocks.Data.NHibernate
 {
@@ -22,7 +23,7 @@ namespace BuildingBlocks.Data.NHibernate
             _configurations.Add(configuration);
         }
 
-        public ISessionResolver Build()
+        public ISessionResolver Build(IAppBuilder app)
         {
             var resolver = new DefaultSessionResolver();
             foreach (var configuration in _configurations) {
@@ -30,6 +31,7 @@ namespace BuildingBlocks.Data.NHibernate
                 resolver.SetFactoryToResolve(factory);
             }
 
+            app.Use<SessionMiddleware>(resolver);
             return resolver;
         }
 
@@ -60,6 +62,10 @@ namespace BuildingBlocks.Data.NHibernate
             internal void SetFactoryToResolve(ISessionFactory factory)
             {
                 _factories.Add(factory);
+            }
+            public IEnumerable<ISessionFactory> GetAllFactories()
+            {
+                return _factories;
             }
         }
 
