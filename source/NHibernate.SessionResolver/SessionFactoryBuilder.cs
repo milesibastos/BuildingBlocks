@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Context;
 using NHibernate.Engine;
+using NHibernate.Owin;
 using Owin;
 
-namespace BuildingBlocks.Data.NHibernate
+namespace NHibernate
 {
     public class SessionFactoryBuilder
     {
@@ -18,22 +17,21 @@ namespace BuildingBlocks.Data.NHibernate
             _configurations = new HashSet<Configuration>();
         }
 
-        public void RegisterConfiguration(Configuration configuration)
+        public void RegisterToBuild(Configuration configuration)
         {
             _configurations.Add(configuration);
         }
 
-        public ISessionResolver Build(IAppBuilder app)
+        public void Build(IAppBuilder app)
         {
             var resolver = new DefaultSessionResolver();
             foreach (var configuration in _configurations) {
                 var factory = configuration.BuildSessionFactory();
-                resolver.SetFactoryToResolve(factory);
+                resolver.RegisterFactoryToResolve(factory);
             }
 
             app.Use<SessionMiddleware>(resolver);
             SessionResolver.SetResolver(resolver);
-            return resolver;
         }
 
         private class DefaultSessionResolver : ISessionResolver
@@ -45,30 +43,31 @@ namespace BuildingBlocks.Data.NHibernate
                 _factories = new HashSet<ISessionFactory>();
             }
 
-            public ISession GetCurrentSessionFor(Type type)
+            internal void RegisterFactoryToResolve(ISessionFactory factory)
             {
-                var factory = GetSessionFactory(type);
+                _factories.Add(factory);
+            }
+
+            public IEnumerable<ISessionFactory> GetAllFactories()
+            {
+                return _factories;
+            }
+
+            public ISessionFactory GetFactoryFor<TEntity>()
+            {
+                var type = typeof(TEntity);
+                var factory = _factories.SingleOrDefault(x => ((ISessionFactoryImplementor)x).TryGetEntityPersister(type.FullName) != null);
+                return factory;
+            }
+
+            public ISession GetCurrentSessionFor<TEntity>()
+            {
+                var factory = GetFactoryFor<TEntity>();
                 if (!CurrentSessionContext.HasBind(factory))
                     CurrentSessionContext.Bind(factory.OpenSession());
 
                 return factory.GetCurrentSession();
             }
-
-            public ISessionFactory GetSessionFactory(Type type)
-            {
-                var factory = _factories.SingleOrDefault(x => ((ISessionFactoryImplementor)x).TryGetEntityPersister(type.FullName) != null);
-                return factory;
-            }
-
-            internal void SetFactoryToResolve(ISessionFactory factory)
-            {
-                _factories.Add(factory);
-            }
-            public IEnumerable<ISessionFactory> GetAllFactories()
-            {
-                return _factories;
-            }
         }
-
     }
 }

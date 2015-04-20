@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.Owin;
-using NHibernate;
 using NHibernate.Context;
 
-namespace BuildingBlocks.Data.NHibernate
+namespace NHibernate.Owin
 {
     public class SessionMiddleware : OwinMiddleware
     {

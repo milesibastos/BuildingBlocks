@@ -130,8 +130,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Code\SessionContext.cs" />
-    <Compile Include="App_Code\NHProvider.cs" />
     <Compile Include="App_Code\NorthwindDbCreator.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -220,6 +218,10 @@
     <ProjectReference Include="..\NHibernate.DomainModel\NHibernate.DomainModel.csproj">
       <Project>{5c649b55-1b3f-4c38-9998-1b043e94a244}</Project>
       <Name>NHibernate.DomainModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NHibernate.SessionResolver\NHibernate.SessionResolver.csproj">
+      <Project>{63cd19ed-5019-493e-a4bb-1d19fed25c17}</Project>
+      <Name>NHibernate.SessionResolver</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

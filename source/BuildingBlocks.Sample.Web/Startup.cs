@@ -1,9 +1,6 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using System.Web.Hosting;
-using BuildingBlocks.Data.NHibernate;
 using Microsoft.Owin;
 using NHibernate;
 using NHibernate.Cfg;
@@ -50,9 +47,9 @@ namespace BuildingBlocks.Sample.Web
 
             
             var builder = new SessionFactoryBuilder();
-            builder.RegisterConfiguration(northwind);
-            builder.RegisterConfiguration(misc);
-            builder.RegisterConfiguration(patient);
+            builder.RegisterToBuild(northwind);
+            builder.RegisterToBuild(misc);
+            builder.RegisterToBuild(patient);
             builder.Build(app);
 
             new SchemaExport(northwind).Create(false, true);
@@ -84,9 +81,9 @@ namespace BuildingBlocks.Sample.Web
 
         private static void NorthwindCreateTestData()
         {
-            var currentSession = SessionResolver.Current.GetCurrentSessionFor(typeof(Customer));
+            var factory = SessionResolver.Current.GetFactoryFor<Customer>();
 
-            using (IStatelessSession session = currentSession.GetSessionImplementation().Factory.OpenStatelessSession())
+            using (IStatelessSession session = factory.OpenStatelessSession())
             using (ITransaction tx = session.BeginTransaction())
             {
                 NorthwindDbCreator.CreateNorthwindData(session);
@@ -97,7 +94,7 @@ namespace BuildingBlocks.Sample.Web
 
         private static void MiscTestCreateTestData()
         {
-            using (ISession session = SessionResolver.Current.GetCurrentSessionFor(typeof(Animal)))
+            using (ISession session = SessionResolver.Current.GetCurrentSessionFor<Animal>())
             using (ITransaction tx = session.BeginTransaction())
             {
                 NorthwindDbCreator.CreateMiscTestData(session);
@@ -107,7 +104,7 @@ namespace BuildingBlocks.Sample.Web
 
         private static void PatientCreateTestData()
         {
-            using (ISession session = SessionResolver.Current.GetCurrentSessionFor(typeof(Patient)))
+            using (ISession session = SessionResolver.Current.GetCurrentSessionFor<Patient>())
             using (ITransaction tx = session.BeginTransaction())
             {
                 NorthwindDbCreator.CreatePatientData(session);

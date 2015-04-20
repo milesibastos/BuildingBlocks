@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
-using NHibernate;
 using NHibernate.Context;
 using NHibernate.Engine;
 
-namespace BuildingBlocks.Data.NHibernate
+namespace NHibernate
 {
     public class SessionResolver
     {
@@ -46,21 +45,6 @@ namespace BuildingBlocks.Data.NHibernate
                 _factories = new HashSet<ISessionFactory>();
             }
 
-            public ISession GetCurrentSessionFor(Type type)
-            {
-                var factory = GetSessionFactory(type);
-                if (!CurrentSessionContext.HasBind(factory))
-                    CurrentSessionContext.Bind(factory.OpenSession());
-
-                return factory.GetCurrentSession();
-            }
-
-            internal ISessionFactory GetSessionFactory(Type type)
-            {
-                var factory = _factories.SingleOrDefault(x => ((ISessionFactoryImplementor)x).TryGetEntityPersister(type.FullName) != null);
-                return factory;
-            }
-
             internal void RegisterFactoryToResolve(ISessionFactory factory)
             {
                 _factories.Add(factory);
@@ -69,6 +53,22 @@ namespace BuildingBlocks.Data.NHibernate
             public IEnumerable<ISessionFactory> GetAllFactories()
             {
                 return _factories;
+            }
+
+            public ISessionFactory GetFactoryFor<TEntity>()
+            {
+                var type = typeof(TEntity);
+                var factory = _factories.SingleOrDefault(x => ((ISessionFactoryImplementor)x).TryGetEntityPersister(type.FullName) != null);
+                return factory;
+            }
+
+            public ISession GetCurrentSessionFor<TEntity>()
+            {
+                var factory = GetFactoryFor<TEntity>();
+                if (!CurrentSessionContext.HasBind(factory))
+                    CurrentSessionContext.Bind(factory.OpenSession());
+
+                return factory.GetCurrentSession();
             }
         }
     }

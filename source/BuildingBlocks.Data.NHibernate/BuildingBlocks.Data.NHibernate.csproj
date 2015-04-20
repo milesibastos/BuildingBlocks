@@ -97,13 +97,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ISessionResolver.cs" />
     <Compile Include="NHRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SessionFactoryBuilder.cs" />
-    <Compile Include="SessionFactoryProvider.cs" />
-    <Compile Include="SessionMiddleware.cs" />
-    <Compile Include="SessionResolver.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -112,6 +107,10 @@
     <ProjectReference Include="..\BuildingBlocks\BuildingBlocks.csproj">
       <Project>{e3c8dce2-74b7-44a3-b27b-3b41ed8a1719}</Project>
       <Name>BuildingBlocks</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NHibernate.SessionResolver\NHibernate.SessionResolver.csproj">
+      <Project>{63cd19ed-5019-493e-a4bb-1d19fed25c17}</Project>
+      <Name>NHibernate.SessionResolver</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
