@@ -9,6 +9,7 @@ using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Connection;
 using NHibernate.DomainModel.Northwind.Entities;
+using NHibernate.Tool.hbm2ddl;
 using Owin;
 
 [assembly: OwinStartup(typeof(BuildingBlocks.Sample.Web.Startup))]
@@ -53,6 +54,10 @@ namespace BuildingBlocks.Sample.Web
             builder.RegisterConfiguration(misc);
             builder.RegisterConfiguration(patient);
             builder.Build(app);
+
+            new SchemaExport(northwind).Create(false, true);
+            new SchemaExport(misc).Create(false, true);
+            new SchemaExport(patient).Create(false, true);
 
             NorthwindCreateTestData();
             MiscTestCreateTestData();
