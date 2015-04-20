@@ -32,6 +32,7 @@ namespace BuildingBlocks.Data.NHibernate
             }
 
             app.Use<SessionMiddleware>(resolver);
+            SessionResolver.SetResolver(resolver);
             return resolver;
         }
 

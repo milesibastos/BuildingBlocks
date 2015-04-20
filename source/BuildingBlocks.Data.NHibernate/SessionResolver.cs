@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NHibernate;
 using NHibernate.Context;
 using NHibernate.Engine;
@@ -15,19 +13,17 @@ namespace BuildingBlocks.Data.NHibernate
         private static SessionResolver _instance = new SessionResolver();
         private ISessionResolver _current;
 
-        public SessionResolver()
-        {
-            InnerSetResolver(new DefaultSessionResolver());
-        }
-
-
         public static ISessionResolver Current { get { return _instance.InnerCurrent; } }
 
         public ISessionResolver InnerCurrent { get { return _current; } }
 
-        public static void Register(ISessionFactory sessionFactory)
+        public static void RegisterFactoryToResolve(params ISessionFactory[] factory)
         {
+            var resolver = new DefaultSessionResolver();
+            foreach (var item in factory)
+                resolver.RegisterFactoryToResolve(item);
 
+            _instance.InnerSetResolver(resolver);
         }
 
         public static void SetResolver(ISessionResolver resolver)
@@ -65,7 +61,7 @@ namespace BuildingBlocks.Data.NHibernate
                 return factory;
             }
 
-            internal void SetFactoryToResolve(ISessionFactory factory)
+            internal void RegisterFactoryToResolve(ISessionFactory factory)
             {
                 _factories.Add(factory);
             }

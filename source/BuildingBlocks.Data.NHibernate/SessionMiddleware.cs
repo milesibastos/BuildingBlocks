@@ -25,7 +25,7 @@ namespace BuildingBlocks.Data.NHibernate
 
             foreach (var factory in _resolver.GetAllFactories())
             {
-                if (!CurrentSessionContext.HasBind(factory))
+                if (CurrentSessionContext.HasBind(factory))
                 {
                     ISession session = CurrentSessionContext.Unbind(factory);
 
