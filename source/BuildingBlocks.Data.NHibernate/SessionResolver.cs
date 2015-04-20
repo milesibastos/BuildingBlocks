@@ -15,7 +15,7 @@ namespace BuildingBlocks.Data.NHibernate
 
         public static ISessionResolver Current { get { return _instance.InnerCurrent; } }
 
-        public ISessionResolver InnerCurrent { get { return _current; } }
+        private ISessionResolver InnerCurrent { get { return _current; } }
 
         public static void RegisterFactoryToResolve(params ISessionFactory[] factory)
         {
@@ -31,7 +31,7 @@ namespace BuildingBlocks.Data.NHibernate
             _instance.InnerSetResolver(resolver);
         }
 
-        public void InnerSetResolver(ISessionResolver resolver)
+        private void InnerSetResolver(ISessionResolver resolver)
         {
             Contract.Requires<ArgumentNullException>(resolver != null);
             _current = resolver;
@@ -55,7 +55,7 @@ namespace BuildingBlocks.Data.NHibernate
                 return factory.GetCurrentSession();
             }
 
-            public ISessionFactory GetSessionFactory(Type type)
+            internal ISessionFactory GetSessionFactory(Type type)
             {
                 var factory = _factories.SingleOrDefault(x => ((ISessionFactoryImplementor)x).TryGetEntityPersister(type.FullName) != null);
                 return factory;
